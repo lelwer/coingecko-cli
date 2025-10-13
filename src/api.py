@@ -97,3 +97,84 @@ def get_price(coin_ids: list[str], timeout: float = 5.0) -> Dict[str, Any]:
         raise RuntimeError("CoinGecko /simple/price returned invalid JSON") from exc
 
     return data
+
+
+def get_trending_coins(timeout: float = 5.0) -> Dict[str, Any]:
+    """Retrieve trending coins from CoinGecko.
+
+    Calls the CoinGecko `/search/trending` endpoint and returns the parsed
+    JSON response. The result typically contains a `coins` key with a list of
+    trending coin objects.
+
+    Args:
+        timeout: Number of seconds to wait for the HTTP response.
+
+    Returns:
+        The JSON-decoded response as a dictionary.
+
+    Raises:
+        requests.exceptions.RequestException: For network-related errors.
+        RuntimeError: For non-success HTTP responses or invalid JSON.
+    """
+    url = f"{COINGECKO_BASE}/search/trending"
+    try:
+        resp = requests.get(url, timeout=timeout)
+    except requests.exceptions.RequestException:
+        # Propagate network-level exceptions to the caller
+        raise
+
+    if not resp.ok:
+        raise RuntimeError(
+            f"CoinGecko /search/trending returned status {resp.status_code}"
+        )
+
+    try:
+        data = resp.json()
+    except ValueError as exc:
+        raise RuntimeError("CoinGecko /search/trending returned invalid JSON") from exc
+
+    return data
+
+
+def get_exchanges(per_page: int = 100, page: int = 1, timeout: float = 5.0) -> list[dict[str, any]]:
+    """List exchanges from CoinGecko.
+
+    Calls the CoinGecko `/exchanges` endpoint and returns the parsed JSON
+    response. The endpoint supports pagination via `per_page` and `page`.
+
+    Args:
+        per_page: Number of exchanges to return per page (max depends on API).
+        page: Page number to retrieve (1-indexed).
+        timeout: Number of seconds to wait for the HTTP response.
+
+    Returns:
+        The JSON-decoded response as a dictionary or list containing exchange
+        objects, depending on the API response.
+
+    Raises:
+        ValueError: If `per_page` or `page` are not positive.
+        requests.exceptions.RequestException: For network-related errors.
+        RuntimeError: For non-success HTTP responses or invalid JSON.
+    """
+    if per_page <= 0:
+        raise ValueError("per_page must be a positive integer")
+    if page <= 0:
+        raise ValueError("page must be a positive integer")
+
+    url = f"{COINGECKO_BASE}/exchanges"
+    params = {"per_page": str(per_page), "page": str(page)}
+
+    try:
+        resp = requests.get(url, params=params, timeout=timeout)
+    except requests.exceptions.RequestException:
+        raise
+
+    if not resp.ok:
+        raise RuntimeError(f"CoinGecko /exchanges returned status {resp.status_code}")
+
+    try:
+        data = resp.json()
+    except ValueError as exc:
+        raise RuntimeError("CoinGecko /exchanges returned invalid JSON") from exc
+
+    return data
