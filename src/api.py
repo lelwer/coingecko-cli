@@ -45,3 +45,55 @@ def ping_api(timeout: float = 5.0) -> Dict[str, Any]:
         raise RuntimeError("CoinGecko /ping returned invalid JSON") from exc
 
     return data
+
+
+def get_price(coin_ids: list[str], timeout: float = 5.0) -> Dict[str, Any]:
+    """Fetch current price (and market cap) for one or more coins.
+
+    Calls the CoinGecko `/simple/price` endpoint and returns the parsed JSON
+    response. The `ids` query parameter must be a comma-separated string of
+    coin ids. This helper requests prices in USD and includes the market cap
+    (usd_market_cap) in the response.
+
+    Args:
+        coin_ids: A list of CoinGecko coin id strings (for example,
+            ['bitcoin', 'ethereum']). Must contain at least one id.
+        timeout: Number of seconds to wait for the HTTP response.
+
+    Returns:
+        The JSON-decoded response as a dictionary mapping coin ids to price
+        objects.
+
+    Raises:
+        ValueError: If `coin_ids` is empty.
+        requests.exceptions.RequestException: For network-related errors.
+        RuntimeError: For non-success HTTP responses or invalid JSON.
+    """
+    if not coin_ids:
+        raise ValueError("coin_ids must contain at least one coin id")
+
+    ids_param = ",".join(coin_ids)
+    url = f"{COINGECKO_BASE}/simple/price"
+    params = {
+        "ids": ids_param,
+        "vs_currencies": "usd",
+        "include_market_cap": "true",
+    }
+
+    try:
+        resp = requests.get(url, params=params, timeout=timeout)
+    except requests.exceptions.RequestException:
+        # Propagate network-level exceptions to the caller
+        raise
+
+    if not resp.ok:
+        raise RuntimeError(
+            f"CoinGecko /simple/price returned status {resp.status_code}"
+        )
+
+    try:
+        data = resp.json()
+    except ValueError as exc:
+        raise RuntimeError("CoinGecko /simple/price returned invalid JSON") from exc
+
+    return data
