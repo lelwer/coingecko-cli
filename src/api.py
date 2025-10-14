@@ -87,9 +87,13 @@ def get_price(coin_ids: list[str], timeout: float = 5.0) -> Dict[str, Any]:
         raise
 
     if not resp.ok:
-        raise RuntimeError(
-            f"CoinGecko /simple/price returned status {resp.status_code}"
-        )
+        try:
+            # The API often sends a JSON response with an error message
+            error_msg = resp.json().get('error', f'HTTP status {resp.status_code}')
+        except ValueError:
+            # Fallback if the response is not valid JSON
+            error_msg = f'HTTP status {resp.status_code}'
+        raise RuntimeError(f"Failed to fetch price data: {error_msg}")
 
     try:
         data = resp.json()

@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+import requests
 from src import api
 
 
@@ -100,9 +101,13 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"#{rank}: {name}")
             print("---------------------------------")
 
-    except Exception as e:
-        print(f"❌ Error: An unexpected error occurred: {e}", file=sys.stderr)
-        return 1 # Return a non-zero exit code to indicate failure
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Network Error: Could not connect to the API. Check your internet connection.", file=sys.stderr)
+        return 1
+    except RuntimeError as e:
+        # This will now catch our specific API errors (like "coin not found")
+        print(f"❌ Error: {e}", file=sys.stderr)
+        return 1
     # --- End Replacing Here ---
 
     return 0 # Return 0 for success

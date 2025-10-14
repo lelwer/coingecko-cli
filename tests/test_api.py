@@ -1,7 +1,7 @@
 from unittest.mock import patch, Mock
 
 from src.api import ping_api, get_price, get_trending_coins, get_exchanges, COINGECKO_BASE
-
+import pytest
 
 def test_ping_api_success():
     expected = {"gecko_says": "test successful"}
@@ -114,4 +114,22 @@ def test_ping_api_failure_network_error():
             ping_api()
 
     # Ensure requests.get was attempted
+    mock_get.assert_called_once()
+
+
+def test_get_price_failure_not_found():
+    """Tests that get_price raises a RuntimeError on a 404 response."""
+    coin_ids = ['not_a_real_coin']
+
+    # Configure the mock to simulate a 404 Not Found response from the API
+    mock_resp = Mock()
+    mock_resp.ok = False
+    mock_resp.status_code = 404
+    mock_resp.json.return_value = {'error': 'coin not found'}
+
+    with patch("src.api.requests.get", return_value=mock_resp) as mock_get:
+        # Assert that the function raises a RuntimeError with the expected message
+        with pytest.raises(RuntimeError, match="Failed to fetch price data: coin not found"):
+            get_price(coin_ids)
+
     mock_get.assert_called_once()
