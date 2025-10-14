@@ -84,7 +84,7 @@ def main(argv: list[str] | None = None) -> int:
 
         elif args.command == "trending":
             data = api.get_trending_coins()
-            print("--- Top-7 Trending Coins ---")
+            print("--- Top Trending Coins ---")
             # The data is a dict {'coins': [{'item': {'name': 'Bitcoin', ...}}]}
             for coin in data.get('coins', []):
                 item = coin.get('item', {})

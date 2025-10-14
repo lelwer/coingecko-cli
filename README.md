@@ -10,7 +10,7 @@ A small, well-tested command-line interface (CLI) for fetching cryptocurrency da
 
 - ✅ Ping API: Check whether the CoinGecko API is reachable.
 - 💰 Get Prices: Fetch the current USD price and market cap for one or more coins (e.g., `bitcoin ethereum`).
-- 🔥 View Trending: List the top-7 trending coins on CoinGecko.
+- 🔥 View Trending: List the top trending coins on CoinGecko.
 - 🏦 List Exchanges: List top exchanges with support for pagination.
 
 ## Installation
@@ -68,7 +68,7 @@ Example output:
 
 ```powershell
 python -m src.main price bitcoin
-python -m src.main price bitcoin ethereum
+python -m src.main price bitcoin solana
 ```
 
 Example output:
@@ -84,7 +84,7 @@ Solana:
 ---------------------
 ```
 
-- Show top-7 trending coins
+- Show top trending coins
 
 ```powershell
 python -m src.main trending
@@ -93,7 +93,7 @@ python -m src.main trending
 Example output:
 
 ```text
---- Top-7 Trending Coins ---
+--- Top Trending Coins ---
 - Bitcoin (BTC)
 - Solana (SOL)
 ----------------------------
@@ -116,7 +116,7 @@ Example output:
 
 ## API
 
-This project is powered by the free and public CoinGecko API: https://api.coingecko.com/api/v3
+This project is powered by the free and public CoinGecko API: https://docs.coingecko.com/
 
 ## Development
 
