@@ -1,4 +1,4 @@
-# Project Name: cg-cli (CoinGecko Command-Line Interface)
+# Project Name: coingecko-cli (CoinGecko Command-Line Interface)
 
 ## Overview
 A command-line tool to fetch cryptocurrency data from the public CoinGecko API. Users can check API status, get coin prices, view trending coins, and list top exchanges. This project is for a university midterm and emphasizes professional practices like testing, CI/CD, and documentation, all developed with AI assistance.
