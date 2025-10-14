@@ -1,24 +1,24 @@
 # Project Name: coingecko-cli (CoinGecko Command-Line Interface)
 
 ## Overview
-A command-line tool to fetch cryptocurrency data from the public CoinGecko API. Users can check API status, get coin prices, view trending coins, and list top exchanges. This project is for a university midterm and emphasizes professional practices like testing, CI/CD, and documentation, all developed with AI assistance.
+A command-line tool to fetch cryptocurrency data from the public CoinGecko API. Users can check API status, get coin prices, view trending coins, and list top exchanges. This project is for practicing what is possible and emphasizes professional practices like testing, CI/CD, and documentation, all developed with AI assistance.
 
 ## API Integration
 - **API:** CoinGecko Public API V3
-- **Base URL:** https://api.coingecko.com/api/v3
+- **Base URL:** https://docs.coingecko.com/
 - **Authentication:** None required.
 - **Key Endpoints:**
   - `/ping` - Check API server status.
   - `/simple/price` - Get current price of any crypto.
-  - `/search/trending` - Get top-7 trending coins.
-  - `/exchanges` - Get top exchanges by volume.
+  - `/search/trending` - Get top trending coins.
+  - `/exchanges` - Get top exchanges by trust score rank.
 - **Data Format:** JSON
 
 ## CLI Commands
 - `cg ping` - Checks if the CoinGecko API is responsive.
 - `cg price <coin_id...>` - Fetches the current price and market cap for one or more cryptocurrencies.
-- `cg trending` - Displays the top-7 trending coins on CoinGecko.
-- `cg exchanges` - Lists the top 10 cryptocurrency exchanges by trust score rank.
+- `cg trending` - Displays the top trending coins on CoinGecko.
+- `cg exchanges` - Lists the top cryptocurrency exchanges by trust score rank.
 
 ## Technical Stack
 - Python 3.10+
